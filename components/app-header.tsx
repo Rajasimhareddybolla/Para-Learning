@@ -12,11 +12,13 @@ import { UserNav } from "@/components/user-nav"
 import { Search, Bell } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useUserStore } from "@/lib/stores/user-store"
+import { useHasMounted } from "@/hooks/useHasMounted"
 
 export function AppHeader() {
   const pathname = usePathname()
   const { notifications } = useUserStore()
   const [isScrolled, setIsScrolled] = React.useState(false)
+  const hasMounted = useHasMounted()
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +28,11 @@ export function AppHeader() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+  
+  // Prevent hydration mismatch
+  if (!hasMounted) {
+    return null
+  }
 
   return (
     <header
@@ -36,8 +43,8 @@ export function AppHeader() {
           : "bg-background",
       )}
     >
-      <div className="container flex h-16 items-center">
-        <div className="mr-4 hidden md:flex">
+      <div className="container flex h-16 items-center justify-center mx-auto">
+        <div className="mr-4 hidden md:flex items-center justify-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
               <span className="font-bold text-white">P</span>

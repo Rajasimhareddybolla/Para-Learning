@@ -36,7 +36,7 @@ export function MainNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex items-center space-x-6">
+    <nav className="flex items-center justify-center space-x-6 mx-auto">
       {navItems.map((item) => {
         const isActive = pathname === item.href
         return (

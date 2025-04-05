@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { useHasMounted } from "@/hooks/useHasMounted"
 import {
   AtSign,
   Bell,
@@ -238,6 +239,7 @@ const messages: Message[] = [
 ]
 
 export default function CommunityMessaging() {
+  const hasMounted = useHasMounted()
   const [activeChannel, setActiveChannel] = useState<Channel>(channels[0])
   const [channelMessages, setChannelMessages] = useState<Message[]>(messages)
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -311,8 +313,13 @@ export default function CommunityMessaging() {
     reset()
   }
 
+  // Prevent hydration mismatch
+  if (!hasMounted) {
+    return null
+  }
+
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-screen w-full overflow-hidden bg-background mx-auto">
       {/* Mobile header */}
       {isMobile && (
         <div className="fixed top-0 left-0 right-0 h-14 border-b bg-background z-10 flex items-center px-4">

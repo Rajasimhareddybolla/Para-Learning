@@ -15,9 +15,22 @@ import {
 import { useUserStore } from "@/lib/stores/user-store"
 import { Badge } from "@/components/ui/badge"
 import { User, Settings, LogOut } from "lucide-react"
+import { useHasMounted } from "@/hooks/useHasMounted"
 
 export function UserNav() {
   const { userLevel, paraCoins } = useUserStore()
+  const hasMounted = useHasMounted()
+
+  // Prevent hydration mismatch
+  if (!hasMounted) {
+    return (
+      <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Avatar className="h-8 w-8">
+          <AvatarFallback>JD</AvatarFallback>
+        </Avatar>
+      </Button>
+    )
+  }
 
   return (
     <DropdownMenu>
