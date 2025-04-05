@@ -2,8 +2,22 @@ import { Button } from "@/components/ui/button"
 import { ChevronRight, Headphones, BookOpen, Zap, Waves } from "lucide-react"
 import CategoryCard from "@/components/category-card"
 import FeaturedAudio from "@/components/featured-audio"
+import { videoLibrary } from "@/lib/video-library"
 
 export default function LibraryPage() {
+  // Get the latest items from each category
+  const featuredItems = [
+    videoLibrary.find(video => video.id === "blissful-deep-relaxation"),
+    videoLibrary.find(video => video.id === "full-body-hiit-beginners"),
+    videoLibrary.find(video => video.id === "first-20-hours")
+  ].filter(Boolean)
+
+  const recentItems = [
+    videoLibrary.find(video => video.id === "focus-meditation-with-music"),
+    videoLibrary.find(video => video.id === "deep-focus-music"),
+    videoLibrary.find(video => video.id === "learning-how-to-learn")
+  ].filter(Boolean)
+
   return (
     <div className="container mx-auto px-4 py-8">
       <section className="mb-12">
@@ -19,7 +33,7 @@ export default function LibraryPage() {
             icon={<Headphones className="h-8 w-8" />}
             href="/library/meditations"
             color="bg-teal-50"
-            count={24}
+            count={videoLibrary.filter(video => video.type === 'meditation').length}
           />
           <CategoryCard
             title="Workout Sessions"
@@ -27,7 +41,7 @@ export default function LibraryPage() {
             icon={<Zap className="h-8 w-8" />}
             href="/library/workouts"
             color="bg-blue-50"
-            count={18}
+            count={videoLibrary.filter(video => video.type === 'workout').length}
           />
           <CategoryCard
             title="Knowledge Talks"
@@ -35,7 +49,7 @@ export default function LibraryPage() {
             icon={<BookOpen className="h-8 w-8" />}
             href="/library/talks"
             color="bg-purple-50"
-            count={32}
+            count={videoLibrary.filter(video => video.type === 'talk').length}
           />
           <CategoryCard
             title="Focus Sounds"
@@ -43,7 +57,7 @@ export default function LibraryPage() {
             icon={<Waves className="h-8 w-8" />}
             href="/library/focus"
             color="bg-amber-50"
-            count={15}
+            count={videoLibrary.filter(video => video.type === 'focus').length}
           />
         </div>
       </section>
@@ -57,27 +71,16 @@ export default function LibraryPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <FeaturedAudio
-            title="Blissful Deep Relaxation"
-            category="Meditation"
-            duration="12 min"
-            image="/placeholder.svg?height=200&width=400"
-            href="/library/meditations/blissful-deep-relaxation"
-          />
-          <FeaturedAudio
-            title="Power HIIT Workout"
-            category="Workout"
-            duration="25 min"
-            image="/placeholder.svg?height=200&width=400"
-            href="/library/workouts/power-hiit"
-          />
-          <FeaturedAudio
-            title="Productivity Mastery"
-            category="Knowledge Talk"
-            duration="18 min"
-            image="/placeholder.svg?height=200&width=400"
-            href="/library/talks/productivity-mastery"
-          />
+          {featuredItems.map((item) => (
+            <FeaturedAudio
+              key={item.id}
+              title={item.title}
+              category={item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+              duration={item.duration}
+              image={item.thumbnail}
+              href={`/library/${item.type}s/${item.id}`}
+            />
+          ))}
         </div>
       </section>
 
@@ -90,27 +93,16 @@ export default function LibraryPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <FeaturedAudio
-            title="Focus Meditation with Music"
-            category="Meditation"
-            duration="15 min"
-            image="/placeholder.svg?height=200&width=400"
-            href="/library/meditations/focus-meditation-with-music"
-          />
-          <FeaturedAudio
-            title="Alpha Waves for Focus"
-            category="Focus Sound"
-            duration="60 min"
-            image="/placeholder.svg?height=200&width=400"
-            href="/library/focus/alpha-waves"
-          />
-          <FeaturedAudio
-            title="Emotional Intelligence"
-            category="Knowledge Talk"
-            duration="22 min"
-            image="/placeholder.svg?height=200&width=400"
-            href="/library/talks/emotional-intelligence"
-          />
+          {recentItems.map((item) => (
+            <FeaturedAudio
+              key={item.id}
+              title={item.title}
+              category={item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+              duration={item.duration}
+              image={item.thumbnail}
+              href={`/library/${item.type}s/${item.id}`}
+            />
+          ))}
         </div>
       </section>
     </div>
