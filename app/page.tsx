@@ -5,27 +5,6 @@ import { ArrowRight } from "lucide-react"
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="border-b">
-        <div className="container flex h-16 items-center px-4">
-          <div className="flex items-center gap-2 font-bold">
-            <span className="text-xl">PARA</span>
-          </div>
-          <nav className="ml-auto flex gap-4 sm:gap-6">
-            <Link href="/profile" className="text-sm font-medium hover:underline">
-              Dashboard
-            </Link>
-            <Link href="/challenges" className="text-sm font-medium hover:underline">
-              Challenges
-            </Link>
-            <Link href="/library" className="text-sm font-medium hover:underline">
-              Library
-            </Link>
-            <Link href="/community" className="text-sm font-medium hover:underline">
-              Community
-            </Link>
-          </nav>
-        </div>
-      </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-100">
           <div className="container px-4 md:px-6">
@@ -146,11 +125,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t">
-        <div className="container flex flex-col gap-2 py-4 md:h-16 md:flex-row md:items-center md:py-0">
-          <p className="text-xs text-gray-500">© 2025 PARA. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   )
 }
