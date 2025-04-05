@@ -28,7 +28,7 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
-      userLevel: 2,
+      userLevel: 4,
       paraCoins: 150,
       completedTasks: 12,
       streakDays: 7,
