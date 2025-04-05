@@ -25,7 +25,45 @@ import { useUserStore } from "@/lib/stores/user-store"
 
 export default function Community() {
   const { userLevel, paraCoins } = useUserStore()
-  const [newPost, setNewPost] = useState("") // added state for new post
+  const [newPost, setNewPost] = useState("")
+  const [posts, setPosts] = useState([
+    {
+      name: "Sarah J.",
+      avatar: "/Archive/1.JPG",
+      time: "2h ago",
+      content: "Just completed my 30-day challenge! The accountability in this community made all the difference. My morning meditation practice is now a solid habit.",
+      likes: 12,
+      comments: 4,
+      isExpert: false,
+    },
+    {
+      name: "Coach David",
+      avatar: "/Archive/2.jpg?height=40&width=40",
+      time: "3h ago",
+      content: "'The only way to do great work is to love what you do.' - Steve Jobs. Remember why you started this journey! What's your primary motivation for transformation?",
+      likes: 32,
+      comments: 5,
+      isExpert: true,
+    },
+    {
+      name: "Michael T.",
+      avatar: "/Archive/3.jpg?height=40&width=40",
+      time: "5h ago",
+      content: "Anyone else struggling with maintaining consistency? Would love some tips from those who've overcome this. I'm great for the first week but then lose momentum.",
+      likes: 8,
+      comments: 7,
+      isExpert: false,
+    },
+    {
+      name: "Dr. Jennifer K.",
+      avatar: "/Archive/4.jpeg?height=40&width=40",
+      time: "6h ago",
+      content: "Research shows that habit stacking is one of the most effective ways to build new behaviors. Try attaching your new habit to an existing one! For example, meditate right after brushing your teeth in the morning.",
+      likes: 45,
+      comments: 12,
+      isExpert: true,
+    }
+  ])
 
   if (userLevel < 2) {
     return <CommunityLocked level={userLevel} />
@@ -84,21 +122,19 @@ export default function Community() {
                           />
                           <div className="flex justify-end">
                             <Button
-                              onClick={async () => {
+                              onClick={() => {
                                 if (newPost.trim()) {
-                                  try {
-                                    // You can replace this with an actual API call
-                                    // For example: await fetch('/api/posts', { method: 'POST', body: JSON.stringify({ content: newPost }) })
-                                    
-                                    // Simulate sending message with delay
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    
-                                    alert("Your post has been shared with the community!");
-                                    setNewPost("");
-                                  } catch (error) {
-                                    console.error("Error sending post:", error);
-                                    alert("Failed to send your post. Please try again.");
+                                  const newPostObj = {
+                                    name: "You",
+                                    avatar: "/placeholder.svg?height=40&width=40",
+                                    time: "Just now",
+                                    content: newPost,
+                                    likes: 0,
+                                    comments: 0,
+                                    isExpert: false,
                                   }
+                                  setPosts([newPostObj, ...posts])
+                                  setNewPost("")
                                 }
                               }}
                               disabled={!newPost.trim()}
@@ -113,45 +149,18 @@ export default function Community() {
                   </Card>
                 )}
 
-                <CommunityPost
-                  name="Sarah J."
-                  avatar="/Archive/1.JPG"
-                  time="2h ago"
-                  content="Just completed my 30-day challenge! The accountability in this community made all the difference. My morning meditation practice is now a solid habit."
-                  likes={12}
-                  comments={4}
-                  isExpert={false}
-                />
-
-                <CommunityPost
-                  name="Coach David"
-                  avatar="/Archive/2.jpg?height=40&width=40"
-                  time="3h ago"
-                  content="'The only way to do great work is to love what you do.' - Steve Jobs. Remember why you started this journey! What's your primary motivation for transformation?"
-                  likes={32}
-                  comments={5}
-                  isExpert={true}
-                />
-
-                <CommunityPost
-                  name="Michael T."
-                  avatar="/Archive/3.jpg?height=40&width=40"
-                  time="5h ago"
-                  content="Anyone else struggling with maintaining consistency? Would love some tips from those who've overcome this. I'm great for the first week but then lose momentum."
-                  likes={8}
-                  comments={7}
-                  isExpert={false}
-                />
-
-                <CommunityPost
-                  name="Dr. Jennifer K."
-                  avatar="/Archive/4.jpeg?height=40&width=40"
-                  time="6h ago"
-                  content="Research shows that habit stacking is one of the most effective ways to build new behaviors. Try attaching your new habit to an existing one! For example, meditate right after brushing your teeth in the morning."
-                  likes={45}
-                  comments={12}
-                  isExpert={true}
-                />
+                {posts.map((post, index) => (
+                  <CommunityPost
+                    key={index}
+                    name={post.name}
+                    avatar={post.avatar}
+                    time={post.time}
+                    content={post.content}
+                    likes={post.likes}
+                    comments={post.comments}
+                    isExpert={post.isExpert}
+                  />
+                ))}
               </div>
 
               <div className="space-y-6">
