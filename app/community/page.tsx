@@ -20,6 +20,7 @@ import {
   Video,
   Award,
   Unlock,
+  Check,
 } from "lucide-react"
 import { useUserStore } from "@/lib/stores/user-store"
 
@@ -38,7 +39,7 @@ export default function Community() {
     },
     {
       name: "Coach David",
-      avatar: "/Archive/2.jpg?height=40&width=40",
+      avatar: "/Archive/2.jpg",
       time: "3h ago",
       content: "'The only way to do great work is to love what you do.' - Steve Jobs. Remember why you started this journey! What's your primary motivation for transformation?",
       likes: 32,
@@ -47,7 +48,7 @@ export default function Community() {
     },
     {
       name: "Michael T.",
-      avatar: "/Archive/3.jpg?height=40&width=40",
+      avatar: "/Archive/3.jpg",
       time: "5h ago",
       content: "Anyone else struggling with maintaining consistency? Would love some tips from those who've overcome this. I'm great for the first week but then lose momentum.",
       likes: 8,
@@ -56,7 +57,7 @@ export default function Community() {
     },
     {
       name: "Dr. Jennifer K.",
-      avatar: "/Archive/4.jpeg?height=40&width=40",
+      avatar: "/Archive/4.jpeg",
       time: "6h ago",
       content: "Research shows that habit stacking is one of the most effective ways to build new behaviors. Try attaching your new habit to an existing one! For example, meditate right after brushing your teeth in the morning.",
       likes: 45,
@@ -111,7 +112,7 @@ export default function Community() {
                       <div className="flex items-start gap-4">
                         <Avatar>
                           <AvatarFallback>You</AvatarFallback>
-                          <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                          <AvatarImage src="/Archive/1.JPG" />
                         </Avatar>
                         <div className="flex-1">
                           <Input
@@ -201,7 +202,7 @@ export default function Community() {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback>SJ</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                        <AvatarImage src="/Archive/1.JPG" />
                       </Avatar>
                       <div>
                         <p className="font-medium">Sarah J.</p>
@@ -211,7 +212,7 @@ export default function Community() {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback>MT</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                        <AvatarImage src="/Archive/3.jpg" />
                       </Avatar>
                       <div>
                         <p className="font-medium">Michael T.</p>
@@ -221,7 +222,7 @@ export default function Community() {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback>ER</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                        <AvatarImage src="/Archive/5.jpeg" />
                       </Avatar>
                       <div>
                         <p className="font-medium">Elena R.</p>
@@ -245,7 +246,7 @@ export default function Community() {
                 date="Friday, April 7"
                 time="3:00 PM - 4:00 PM EST"
                 host="Sarah Johnson"
-                hostAvatar="/Archive/5.jpeg?height=40&width=40"
+                hostAvatar="/Archive/1.JPG"
                 participants={18}
                 requiredLevel={3}
                 userLevel={userLevel}
@@ -257,7 +258,7 @@ export default function Community() {
                 date="Monday, April 10"
                 time="1:00 PM - 2:00 PM EST"
                 host="Coach Marcus"
-                hostAvatar="/Archive/3.jpg?height=40&width=40"
+                hostAvatar="/Archive/2.jpg"
                 participants={24}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -269,7 +270,7 @@ export default function Community() {
                 date="Wednesday, April 12"
                 time="11:00 AM - 12:30 PM EST"
                 host="Dr. Jennifer K."
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/4.jpeg"
                 participants={32}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -281,7 +282,7 @@ export default function Community() {
                 date="Monday, April 17"
                 time="4:00 PM - 5:00 PM EST"
                 host="Community Team"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/5.jpeg"
                 participants={45}
                 requiredLevel={3}
                 userLevel={userLevel}
@@ -293,7 +294,7 @@ export default function Community() {
                 date="Thursday, April 20"
                 time="2:00 PM - 3:30 PM EST"
                 host="Dr. Sarah Chen"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/4.jpeg"
                 participants={28}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -305,7 +306,7 @@ export default function Community() {
                 date="Tuesday, April 25"
                 time="1:00 PM - 2:00 PM EST"
                 host="James Wilson"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/3.jpg"
                 participants={36}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -679,6 +680,17 @@ function CommunityChallenge({
   requiredLevel,
   userLevel,
 }: CommunityChallenge) {
+  const { joinChallenge, leaveChallenge, hasJoinedChallenge } = useUserStore();
+  const isJoined = hasJoinedChallenge(title);
+
+  const handleToggleJoin = () => {
+    if (isJoined) {
+      leaveChallenge(title);
+    } else {
+      joinChallenge(title);
+    }
+  };
+
   return (
     <Card>
       <CardContent className="p-4">
@@ -687,7 +699,7 @@ function CommunityChallenge({
         <div className="flex flex-wrap gap-2 mb-4">
           <Badge variant="outline" className="flex items-center gap-1">
             <Users className="h-3 w-3" />
-            {participants} participants
+            {participants + (isJoined ? 1 : 0)} participants
           </Badge>
           <Badge variant="outline" className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
@@ -699,7 +711,20 @@ function CommunityChallenge({
           </Badge>
         </div>
         {userLevel >= requiredLevel ? (
-          <Button className="w-full">Join Challenge</Button>
+          <Button 
+            className="w-full"
+            variant={isJoined ? "secondary" : "default"}
+            onClick={handleToggleJoin}
+          >
+            {isJoined ? (
+              <>
+                <Check className="h-4 w-4 mr-1" />
+                Joined
+              </>
+            ) : (
+              "Join Challenge"
+            )}
+          </Button>
         ) : (
           <Button disabled variant="outline" className="w-full">
             <Lock className="h-4 w-4 mr-1" />

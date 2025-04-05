@@ -16,6 +16,7 @@ interface UserState {
     content: string
     timestamp: string
   }[]
+  joinedChallenges: string[] // Array to store IDs of joined challenges
 
   addParaCoins: (amount: number) => void
   completeTask: (coinReward: number) => void
@@ -23,6 +24,9 @@ interface UserState {
   advanceChallenge: () => void
   clearNotifications: () => void
   addAiMessage: (role: "user" | "assistant", content: string) => void
+  joinChallenge: (challengeTitle: string) => void
+  leaveChallenge: (challengeTitle: string) => void
+  hasJoinedChallenge: (challengeTitle: string) => boolean
 }
 
 export const useUserStore = create<UserState>()(
@@ -42,6 +46,7 @@ export const useUserStore = create<UserState>()(
           timestamp: new Date().toISOString(),
         },
       ],
+      joinedChallenges: [],
 
       addParaCoins: (amount) => {
         set((state) => {
@@ -142,6 +147,21 @@ export const useUserStore = create<UserState>()(
           ],
         }))
       },
+
+      joinChallenge: (challengeTitle) =>
+        set((state) => ({
+          joinedChallenges: [...state.joinedChallenges, challengeTitle],
+        })),
+
+      leaveChallenge: (challengeTitle) =>
+        set((state) => ({
+          joinedChallenges: state.joinedChallenges.filter(
+            (title) => title !== challengeTitle,
+          ),
+        })),
+
+      hasJoinedChallenge: (challengeTitle) =>
+        get().joinedChallenges.includes(challengeTitle),
     }),
     {
       name: "para-user-storage",
