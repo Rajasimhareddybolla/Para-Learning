@@ -78,10 +78,10 @@ export default function ProfilePage() {
               <div className="h-24 bg-gradient-to-r from-blue-500 to-violet-600"></div>
               <CardContent className="p-6 pt-0 -mt-12">
                 <div className="flex flex-col items-center text-center">
-                  <Avatar className="h-24 w-24 border-4 border-background">
+                    <Avatar className="h-24 w-24 border-4 border-background">
                     <AvatarFallback>JD</AvatarFallback>
-                    <AvatarImage src="/placeholder.svg?height=96&width=96" alt="Jane Doe" />
-                  </Avatar>
+                    <AvatarImage src="/image.png" alt="Jane Doe" />
+                    </Avatar>
                   <h2 className="text-2xl font-bold mt-4">Jane Doe</h2>
                   <p className="text-sm text-muted-foreground">Member since April 2025</p>
 

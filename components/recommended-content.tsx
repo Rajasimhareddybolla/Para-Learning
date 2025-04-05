@@ -15,7 +15,7 @@ export function RecommendedContent() {
       description: "Start your day with clarity and purpose",
       category: "meditation",
       duration: "10 min",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/rec/1.jpg?height=80&width=80",
     },
     {
       id: "2",
@@ -23,7 +23,7 @@ export function RecommendedContent() {
       description: "Essential strategies for peak performance",
       category: "knowledge",
       duration: "20 min",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/rec/2.jpg?height=80&width=80",
     },
     {
       id: "3",
@@ -31,7 +31,7 @@ export function RecommendedContent() {
       description: "Binaural beats to enhance concentration",
       category: "focus",
       duration: "45 min",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/rec/3.jpg?height=80&width=80",
     },
   ]
 
@@ -85,13 +85,7 @@ export function RecommendedContent() {
                     {getCategoryIcon(item.category)}
                     <span>{item.duration}</span>
                   </Badge>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 w-8 p-0 rounded-full hover:bg-blue-100 hover:text-blue-600"
-                  >
-                    <Play className="h-4 w-4" />
-                  </Button>
+
                 </div>
               </div>
             </div>

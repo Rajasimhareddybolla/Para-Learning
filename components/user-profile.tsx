@@ -38,9 +38,9 @@ export function UserProfile() {
       <CardContent>
         <div className="flex flex-col items-center mb-6">
           <Avatar className="h-20 w-20 mb-4">
-            <AvatarFallback>JD</AvatarFallback>
-            <AvatarImage src="/placeholder.svg?height=80&width=80" />
-          </Avatar>
+          <AvatarFallback>JD</AvatarFallback>
+                    <AvatarImage src="/image.png" alt="Jane Doe" />
+            </Avatar>
           <h2 className="text-xl font-bold">Jane Doe</h2>
           <p className="text-sm text-gray-500">Member since April 2025</p>
           <div className="flex items-center gap-2 mt-2">

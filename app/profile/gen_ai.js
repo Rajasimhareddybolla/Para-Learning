@@ -17,6 +17,7 @@ class GoogleGenAI {
       // If a responseSchema is provided, add it to the generationConfig
       if (responseSchema) {
         this.generationConfig.responseSchema = responseSchema;
+        this.generationConfig.responseMimeType =  "application/json";
       }
     }
   

@@ -16,6 +16,7 @@ interface UserState {
     content: string
     timestamp: string
   }[]
+  joinedChallenges: string[] // Array to store IDs of joined challenges
 
   addParaCoins: (amount: number) => void
   completeTask: (coinReward: number) => void
@@ -23,12 +24,16 @@ interface UserState {
   advanceChallenge: () => void
   clearNotifications: () => void
   addAiMessage: (role: "user" | "assistant", content: string) => void
+  joinChallenge: (challengeTitle: string) => void
+  leaveChallenge: (challengeTitle: string) => void
+  hasJoinedChallenge: (challengeTitle: string) => boolean
+  getUserContextForAI: () => string // New function to get user context
 }
 
 export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
-      userLevel: 2,
+      userLevel: 4,
       paraCoins: 150,
       completedTasks: 12,
       streakDays: 7,
@@ -42,6 +47,19 @@ export const useUserStore = create<UserState>()(
           timestamp: new Date().toISOString(),
         },
       ],
+      joinedChallenges: [],
+
+      getUserContextForAI: () => {
+        const state = get();
+        return JSON.stringify({
+          userLevel: state.userLevel,
+          paraCoins: state.paraCoins,
+          completedTasks: state.completedTasks,
+          streakDays: state.streakDays,
+          challengeDay: state.challengeDay,
+          joinedChallenges: state.joinedChallenges
+        });
+      },
 
       addParaCoins: (amount) => {
         set((state) => {
@@ -142,6 +160,21 @@ export const useUserStore = create<UserState>()(
           ],
         }))
       },
+
+      joinChallenge: (challengeTitle) =>
+        set((state) => ({
+          joinedChallenges: [...state.joinedChallenges, challengeTitle],
+        })),
+
+      leaveChallenge: (challengeTitle) =>
+        set((state) => ({
+          joinedChallenges: state.joinedChallenges.filter(
+            (title) => title !== challengeTitle,
+          ),
+        })),
+
+      hasJoinedChallenge: (challengeTitle) =>
+        get().joinedChallenges.includes(challengeTitle),
     }),
     {
       name: "para-user-storage",

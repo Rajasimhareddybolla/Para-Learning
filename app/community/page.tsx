@@ -1,12 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   MessageCircle,
   Users,
@@ -20,14 +26,58 @@ import {
   Video,
   Award,
   Unlock,
-} from "lucide-react"
-import { useUserStore } from "@/lib/stores/user-store"
+  Check,
+} from "lucide-react";
+import { useUserStore } from "@/lib/stores/user-store";
 
 export default function Community() {
-  const { userLevel, paraCoins } = useUserStore()
+  const { userLevel, paraCoins } = useUserStore();
+  const [newPost, setNewPost] = useState("");
+  const [posts, setPosts] = useState([
+    {
+      name: "Sarah J.",
+      avatar: "/Archive/1.JPG",
+      time: "2h ago",
+      content:
+        "Just completed my 30-day challenge! The accountability in this community made all the difference. My morning meditation practice is now a solid habit.",
+      likes: 12,
+      comments: 4,
+      isExpert: false,
+    },
+    {
+      name: "Coach David",
+      avatar: "/Archive/2.jpg",
+      time: "3h ago",
+      content:
+        "'The only way to do great work is to love what you do.' - Steve Jobs. Remember why you started this journey! What's your primary motivation for transformation?",
+      likes: 32,
+      comments: 5,
+      isExpert: true,
+    },
+    {
+      name: "Michael T.",
+      avatar: "/Archive/3.jpg",
+      time: "5h ago",
+      content:
+        "Anyone else struggling with maintaining consistency? Would love some tips from those who've overcome this. I'm great for the first week but then lose momentum.",
+      likes: 8,
+      comments: 7,
+      isExpert: false,
+    },
+    {
+      name: "Dr. Jennifer K.",
+      avatar: "/Archive/4.jpeg",
+      time: "6h ago",
+      content:
+        "Research shows that habit stacking is one of the most effective ways to build new behaviors. Try attaching your new habit to an existing one! For example, meditate right after brushing your teeth in the morning.",
+      likes: 45,
+      comments: 12,
+      isExpert: true,
+    },
+  ]);
 
   if (userLevel < 2) {
-    return <CommunityLocked level={userLevel} />
+    return <CommunityLocked level={userLevel} />;
   }
 
   return (
@@ -36,7 +86,9 @@ export default function Community() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold">Community</h1>
-            <p className="text-gray-500">Connect with fellow members on their transformation journey</p>
+            <p className="text-gray-500">
+              Connect with fellow members on their transformation journey
+            </p>
           </div>
           <Badge variant="outline" className="text-lg px-3 py-1">
             Level {userLevel} • {paraCoins} PARA Coins
@@ -44,14 +96,10 @@ export default function Community() {
         </div>
 
         <Tabs defaultValue="feed">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="flex justify-center gap-4">
             <TabsTrigger value="feed">
               <MessageCircle className="h-4 w-4 mr-2" />
               Feed
-            </TabsTrigger>
-            <TabsTrigger value="events">
-              <Calendar className="h-4 w-4 mr-2" />
-              Events
             </TabsTrigger>
             <TabsTrigger value="experts">
               <UserPlus className="h-4 w-4 mr-2" />
@@ -72,14 +120,37 @@ export default function Community() {
                       <div className="flex items-start gap-4">
                         <Avatar>
                           <AvatarFallback>You</AvatarFallback>
-                          <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                          <AvatarImage src="/Archive/1.JPG" />
                         </Avatar>
                         <div className="flex-1">
-                          <Input placeholder="Share your thoughts or progress..." className="mb-2" />
+                          <Input
+                            placeholder="Share your thoughts or progress..."
+                            className="mb-2"
+                            value={newPost}
+                            onChange={(e) => setNewPost(e.target.value)}
+                          />
                           <div className="flex justify-end">
-                            <Button>
+                            <Button
+                              onClick={() => {
+                                if (newPost.trim()) {
+                                  const newPostObj = {
+                                    name: "You",
+                                    avatar:
+                                      "/placeholder.svg?height=40&width=40",
+                                    time: "Just now",
+                                    content: newPost,
+                                    likes: 0,
+                                    comments: 0,
+                                    isExpert: false,
+                                  };
+                                  setPosts([newPostObj, ...posts]);
+                                  setNewPost("");
+                                }
+                              }}
+                              disabled={!newPost.trim()}
+                            >
                               <Send className="h-4 w-4 mr-2" />
-                              Post
+                              {newPost.trim() ? "Send" : "Post"}
                             </Button>
                           </div>
                         </div>
@@ -88,65 +159,46 @@ export default function Community() {
                   </Card>
                 )}
 
-                <CommunityPost
-                  name="Sarah J."
-                  avatar="/placeholder.svg?height=40&width=40"
-                  time="2h ago"
-                  content="Just completed my 30-day challenge! The accountability in this community made all the difference. My morning meditation practice is now a solid habit."
-                  likes={12}
-                  comments={4}
-                  isExpert={false}
-                />
-
-                <CommunityPost
-                  name="Coach David"
-                  avatar="/placeholder.svg?height=40&width=40"
-                  time="3h ago"
-                  content="'The only way to do great work is to love what you do.' - Steve Jobs. Remember why you started this journey! What's your primary motivation for transformation?"
-                  likes={32}
-                  comments={5}
-                  isExpert={true}
-                />
-
-                <CommunityPost
-                  name="Michael T."
-                  avatar="/placeholder.svg?height=40&width=40"
-                  time="5h ago"
-                  content="Anyone else struggling with maintaining consistency? Would love some tips from those who've overcome this. I'm great for the first week but then lose momentum."
-                  likes={8}
-                  comments={7}
-                  isExpert={false}
-                />
-
-                <CommunityPost
-                  name="Dr. Jennifer K."
-                  avatar="/placeholder.svg?height=40&width=40"
-                  time="6h ago"
-                  content="Research shows that habit stacking is one of the most effective ways to build new behaviors. Try attaching your new habit to an existing one! For example, meditate right after brushing your teeth in the morning."
-                  likes={45}
-                  comments={12}
-                  isExpert={true}
-                />
+                {posts.map((post, index) => (
+                  <CommunityPost
+                    key={index}
+                    name={post.name}
+                    avatar={post.avatar}
+                    time={post.time}
+                    content={post.content}
+                    likes={post.likes}
+                    comments={post.comments}
+                    isExpert={post.isExpert}
+                  />
+                ))}
               </div>
 
               <div className="space-y-6">
                 <Card>
                   <CardHeader>
                     <CardTitle>Upcoming Events</CardTitle>
-                    <CardDescription>Join live sessions with the community</CardDescription>
+                    <CardDescription>
+                      Join live sessions with the community
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="border rounded-lg p-3">
                       <h3 className="font-medium">Weekly Reflection Circle</h3>
-                      <p className="text-sm text-gray-500 mb-2">Share insights and challenges</p>
+                      <p className="text-sm text-gray-500 mb-2">
+                        Share insights and challenges
+                      </p>
                       <div className="flex items-center gap-2 text-sm text-gray-500">
                         <Calendar className="h-3 w-3" />
                         <span>Friday, 3:00 PM</span>
                       </div>
                     </div>
                     <div className="border rounded-lg p-3">
-                      <h3 className="font-medium">Expert AMA: Overcoming Plateaus</h3>
-                      <p className="text-sm text-gray-500 mb-2">Live Q&A with Coach Marcus</p>
+                      <h3 className="font-medium">
+                        Expert AMA: Overcoming Plateaus
+                      </h3>
+                      <p className="text-sm text-gray-500 mb-2">
+                        Live Q&A with Coach Marcus
+                      </p>
                       <div className="flex items-center gap-2 text-sm text-gray-500">
                         <Calendar className="h-3 w-3" />
                         <span>Monday, 1:00 PM</span>
@@ -161,37 +213,45 @@ export default function Community() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Active Members</CardTitle>
-                    <CardDescription>Connect with fellow challengers</CardDescription>
+                    <CardDescription>
+                      Connect with fellow challengers
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback>SJ</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                        <AvatarImage src="/Archive/1.JPG" />
                       </Avatar>
                       <div>
                         <p className="font-medium">Sarah J.</p>
-                        <p className="text-xs text-gray-500">Level 3 • 21-day streak</p>
+                        <p className="text-xs text-gray-500">
+                          Level 3 • 21-day streak
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback>MT</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                        <AvatarImage src="/Archive/3.jpg" />
                       </Avatar>
                       <div>
                         <p className="font-medium">Michael T.</p>
-                        <p className="text-xs text-gray-500">Level 2 • 7-day streak</p>
+                        <p className="text-xs text-gray-500">
+                          Level 2 • 7-day streak
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback>ER</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                        <AvatarImage src="/Archive/5.jpeg" />
                       </Avatar>
                       <div>
                         <p className="font-medium">Elena R.</p>
-                        <p className="text-xs text-gray-500">Level 3 • 35-day streak</p>
+                        <p className="text-xs text-gray-500">
+                          Level 3 • 35-day streak
+                        </p>
                       </div>
                     </div>
                     <Button variant="outline" className="w-full">
@@ -211,7 +271,7 @@ export default function Community() {
                 date="Friday, April 7"
                 time="3:00 PM - 4:00 PM EST"
                 host="Sarah Johnson"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/1.JPG"
                 participants={18}
                 requiredLevel={3}
                 userLevel={userLevel}
@@ -223,7 +283,7 @@ export default function Community() {
                 date="Monday, April 10"
                 time="1:00 PM - 2:00 PM EST"
                 host="Coach Marcus"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/2.jpg"
                 participants={24}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -235,7 +295,7 @@ export default function Community() {
                 date="Wednesday, April 12"
                 time="11:00 AM - 12:30 PM EST"
                 host="Dr. Jennifer K."
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/4.jpeg"
                 participants={32}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -247,7 +307,7 @@ export default function Community() {
                 date="Monday, April 17"
                 time="4:00 PM - 5:00 PM EST"
                 host="Community Team"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/5.jpeg"
                 participants={45}
                 requiredLevel={3}
                 userLevel={userLevel}
@@ -259,7 +319,7 @@ export default function Community() {
                 date="Thursday, April 20"
                 time="2:00 PM - 3:30 PM EST"
                 host="Dr. Sarah Chen"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/4.jpeg"
                 participants={28}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -271,7 +331,7 @@ export default function Community() {
                 date="Tuesday, April 25"
                 time="1:00 PM - 2:00 PM EST"
                 host="James Wilson"
-                hostAvatar="/placeholder.svg?height=40&width=40"
+                hostAvatar="/Archive/3.jpg"
                 participants={36}
                 requiredLevel={2}
                 userLevel={userLevel}
@@ -284,9 +344,13 @@ export default function Community() {
               <ExpertCard
                 name="Dr. Jennifer K."
                 title="Mindset & Psychology Expert"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/1.jpg?height=200&width=200"
                 bio="Specializes in helping people overcome limiting beliefs and develop resilient mindsets. PhD in Psychology with 15 years of experience in personal transformation."
-                expertise={["Mindset Transformation", "Habit Formation", "Emotional Intelligence"]}
+                expertise={[
+                  "Mindset Transformation",
+                  "Habit Formation",
+                  "Emotional Intelligence",
+                ]}
                 requiredLevel={2}
                 userLevel={userLevel}
               />
@@ -294,9 +358,13 @@ export default function Community() {
               <ExpertCard
                 name="Coach Marcus"
                 title="Performance & Productivity Coach"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/2.webp?height=200&width=200"
                 bio="Former Olympic athlete turned productivity expert. Helps high-achievers optimize their systems and routines for peak performance and sustainable growth."
-                expertise={["Peak Performance", "Goal Achievement", "Time Management"]}
+                expertise={[
+                  "Peak Performance",
+                  "Goal Achievement",
+                  "Time Management",
+                ]}
                 requiredLevel={2}
                 userLevel={userLevel}
               />
@@ -304,9 +372,13 @@ export default function Community() {
               <ExpertCard
                 name="Sarah Chen, PhD"
                 title="Meditation & Mindfulness Guide"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/3.jpeg?height=200&width=200"
                 bio="Meditation practitioner with over 20 years of experience. Combines Eastern wisdom with modern neuroscience to help people develop deeper awareness."
-                expertise={["Meditation", "Stress Reduction", "Present Moment Awareness"]}
+                expertise={[
+                  "Meditation",
+                  "Stress Reduction",
+                  "Present Moment Awareness",
+                ]}
                 requiredLevel={2}
                 userLevel={userLevel}
               />
@@ -314,30 +386,38 @@ export default function Community() {
               <ExpertCard
                 name="David Rodriguez"
                 title="Physical Transformation Specialist"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/4.jpeg?height=200&width=200"
                 bio="Certified fitness trainer and nutritionist who focuses on sustainable lifestyle changes rather than quick fixes. Specializes in habit-based fitness."
                 expertise={["Fitness Habits", "Nutrition", "Energy Management"]}
-                requiredLevel={3}
+                requiredLevel={4}
                 userLevel={userLevel}
               />
 
               <ExpertCard
                 name="Dr. Michael Lee"
                 title="Sleep & Recovery Expert"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/community/5.jpeg?height=200&width=200"
                 bio="Neuroscientist specializing in sleep optimization and recovery protocols. Helps high-performers enhance their rest for better overall performance."
-                expertise={["Sleep Optimization", "Recovery Protocols", "Circadian Rhythms"]}
-                requiredLevel={3}
+                expertise={[
+                  "Sleep Optimization",
+                  "Recovery Protocols",
+                  "Circadian Rhythms",
+                ]}
+                requiredLevel={4}
                 userLevel={userLevel}
               />
 
               <ExpertCard
                 name="Elena Patel"
                 title="Purpose & Vision Coach"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/6.jpeg?height=200&width=200"
                 bio="Guides individuals in discovering their core values and aligning their goals with deeper purpose. Former executive who found meaning through personal transformation."
-                expertise={["Purpose Discovery", "Vision Setting", "Values Alignment"]}
-                requiredLevel={3}
+                expertise={[
+                  "Purpose Discovery",
+                  "Vision Setting",
+                  "Values Alignment",
+                ]}
+                requiredLevel={4}
                 userLevel={userLevel}
               />
             </div>
@@ -409,7 +489,7 @@ export default function Community() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
 
 function CommunityLocked({ level }: { level: number }) {
@@ -426,18 +506,26 @@ function CommunityLocked({ level }: { level: number }) {
           </p>
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Badge variant={level >= 1 ? "default" : "outline"}>Level 1</Badge>
+              <Badge variant={level >= 1 ? "default" : "outline"}>
+                Level 1
+              </Badge>
               <span className="text-sm">Solo Journey - AI Coach Access</span>
               <Unlock className="h-3 w-3 ml-auto text-green-500" />
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={level >= 2 ? "default" : "outline"}>Level 2</Badge>
+              <Badge variant={level >= 2 ? "default" : "outline"}>
+                Level 2
+              </Badge>
               <span className="text-sm">Mentor Access - Expert Guidance</span>
               {level < 2 && <Lock className="h-3 w-3 ml-auto" />}
-              {level >= 2 && <Unlock className="h-3 w-3 ml-auto text-green-500" />}
+              {level >= 2 && (
+                <Unlock className="h-3 w-3 ml-auto text-green-500" />
+              )}
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={level >= 3 ? "default" : "outline"}>Level 3</Badge>
+              <Badge variant={level >= 3 ? "default" : "outline"}>
+                Level 3
+              </Badge>
               <span className="text-sm">Community Access - Full Features</span>
               <Lock className="h-3 w-3 ml-auto" />
             </div>
@@ -448,21 +536,29 @@ function CommunityLocked({ level }: { level: number }) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 interface CommunityPostProps {
-  name: string
-  avatar: string
-  time: string
-  content: string
-  likes: number
-  comments: number
-  isExpert: boolean
+  name: string;
+  avatar: string;
+  time: string;
+  content: string;
+  likes: number;
+  comments: number;
+  isExpert: boolean;
 }
 
-function CommunityPost({ name, avatar, time, content, likes, comments, isExpert }: CommunityPostProps) {
-  const [liked, setLiked] = useState(false)
+function CommunityPost({
+  name,
+  avatar,
+  time,
+  content,
+  likes,
+  comments,
+  isExpert,
+}: CommunityPostProps) {
+  const [liked, setLiked] = useState(false);
 
   return (
     <Card>
@@ -476,7 +572,10 @@ function CommunityPost({ name, avatar, time, content, likes, comments, isExpert 
             <div className="flex items-center gap-2">
               <span className="font-medium">{name}</span>
               {isExpert && (
-                <Badge variant="outline" className="h-5 flex items-center text-xs">
+                <Badge
+                  variant="outline"
+                  className="h-5 flex items-center text-xs"
+                >
                   <UserPlus className="h-3 w-3 mr-1" />
                   Expert
                 </Badge>
@@ -490,7 +589,9 @@ function CommunityPost({ name, avatar, time, content, likes, comments, isExpert 
           <Button
             variant="ghost"
             size="sm"
-            className={`flex items-center gap-1 ${liked ? "text-blue-500" : ""}`}
+            className={`flex items-center gap-1 ${
+              liked ? "text-blue-500" : ""
+            }`}
             onClick={() => setLiked(!liked)}
           >
             <ThumbsUp className="h-4 w-4" />
@@ -503,19 +604,19 @@ function CommunityPost({ name, avatar, time, content, likes, comments, isExpert 
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 interface EventCardProps {
-  title: string
-  description: string
-  date: string
-  time: string
-  host: string
-  hostAvatar: string
-  participants: number
-  requiredLevel: number
-  userLevel: number
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  host: string;
+  hostAvatar: string;
+  participants: number;
+  requiredLevel: number;
+  userLevel: number;
 }
 
 function EventCard({
@@ -563,7 +664,11 @@ function EventCard({
                 Join Event
               </Button>
             ) : (
-              <Button disabled variant="outline" className="w-full flex items-center gap-1">
+              <Button
+                disabled
+                variant="outline"
+                className="w-full flex items-center gap-1"
+              >
                 <Lock className="h-4 w-4 mr-1" />
                 Level {requiredLevel} Required
               </Button>
@@ -572,24 +677,52 @@ function EventCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 interface ExpertCardProps {
-  name: string
-  title: string
-  avatar: string
-  bio: string
-  expertise: string[]
-  requiredLevel: number
-  userLevel: number
+  name: string;
+  title: string;
+  avatar: string;
+  bio: string;
+  expertise: string[];
+  requiredLevel: number;
+  userLevel: number;
 }
 
-function ExpertCard({ name, title, avatar, bio, expertise, requiredLevel, userLevel }: ExpertCardProps) {
+function ExpertCard({
+  name,
+  title,
+  avatar,
+  bio,
+  expertise,
+  requiredLevel,
+  userLevel,
+}: ExpertCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", age: "", number: "" });
+  const [isScheduled, setIsScheduled] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = () => {
+    if (formData.name && formData.age && formData.number) {
+      setIsScheduled(true);
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <Card>
       <div className="relative">
-        <img src={avatar || "/placeholder.svg"} alt={name} className="w-full h-48 object-cover" />
+        <img
+          src={avatar || "/placeholder.svg"}
+          alt={name}
+          className="w-full h-48 object-cover"
+        />
         {userLevel < requiredLevel && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <div className="text-center text-white">
@@ -614,7 +747,58 @@ function ExpertCard({ name, title, avatar, bio, expertise, requiredLevel, userLe
           </div>
         </div>
         {userLevel >= requiredLevel ? (
-          <Button className="w-full">Schedule Session</Button>
+          <>
+            <Button
+              className={`w-full ${isScheduled ? "bg-green-500 text-white" : ""}`}
+              onClick={() => setIsModalOpen(true)}
+              disabled={isScheduled}
+            >
+              {isScheduled ? "Session Scheduled" : "Schedule Session"}
+            </Button>
+            {isModalOpen && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                  <h3 className="text-lg font-bold mb-4">Schedule Session</h3>
+                  <div className="space-y-4">
+                    <Input
+                      placeholder="Name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                    />
+                    <Input
+                      placeholder="Age"
+                      name="age"
+                      value={formData.age}
+                      onChange={handleInputChange}
+                    />
+                    <Input
+                      placeholder="Phone Number"
+                      name="number"
+                      value={formData.number}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={
+                        !formData.name || !formData.age || !formData.number
+                      }
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <Button disabled variant="outline" className="w-full">
             <Lock className="h-4 w-4 mr-1" />
@@ -623,17 +807,17 @@ function ExpertCard({ name, title, avatar, bio, expertise, requiredLevel, userLe
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 interface CommunityChallenge {
-  title: string
-  description: string
-  participants: number
-  startDate: string
-  duration: string
-  requiredLevel: number
-  userLevel: number
+  title: string;
+  description: string;
+  participants: number;
+  startDate: string;
+  duration: string;
+  requiredLevel: number;
+  userLevel: number;
 }
 
 function CommunityChallenge({
@@ -645,6 +829,17 @@ function CommunityChallenge({
   requiredLevel,
   userLevel,
 }: CommunityChallenge) {
+  const { joinChallenge, leaveChallenge, hasJoinedChallenge } = useUserStore();
+  const isJoined = hasJoinedChallenge(title);
+
+  const handleToggleJoin = () => {
+    if (isJoined) {
+      leaveChallenge(title);
+    } else {
+      joinChallenge(title);
+    }
+  };
+
   return (
     <Card>
       <CardContent className="p-4">
@@ -653,7 +848,7 @@ function CommunityChallenge({
         <div className="flex flex-wrap gap-2 mb-4">
           <Badge variant="outline" className="flex items-center gap-1">
             <Users className="h-3 w-3" />
-            {participants} participants
+            {participants + (isJoined ? 1 : 0)} participants
           </Badge>
           <Badge variant="outline" className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
@@ -665,7 +860,20 @@ function CommunityChallenge({
           </Badge>
         </div>
         {userLevel >= requiredLevel ? (
-          <Button className="w-full">Join Challenge</Button>
+          <Button
+            className="w-full"
+            variant={isJoined ? "secondary" : "default"}
+            onClick={handleToggleJoin}
+          >
+            {isJoined ? (
+              <>
+                <Check className="h-4 w-4 mr-1" />
+                Joined
+              </>
+            ) : (
+              "Join Challenge"
+            )}
+          </Button>
         ) : (
           <Button disabled variant="outline" className="w-full">
             <Lock className="h-4 w-4 mr-1" />
@@ -674,6 +882,5 @@ function CommunityChallenge({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
-
