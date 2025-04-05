@@ -153,26 +153,64 @@ export const videoLibrary: Video[] = [
 
   // Talks (32 items)
   {
-    id: "productivity-mastery",
-    title: "Productivity Mastery",
-    description: "Learn effective strategies for maximizing your productivity and achieving your goals. This talk covers time management, focus techniques, and mindset shifts for peak performance.",
-    thumbnail: getYouTubeThumbnail("dQw4w9WgXcQ"),
-    duration: "18 min",
-    category: "Productivity",
+    id: "first-20-hours",
+    title: "The first 20 hours -- how to learn anything",
+    description: "Josh Kaufman shares his method for rapid skill acquisition, showing how you can learn any new skill in just 20 hours of focused, deliberate practice. This talk will change how you approach learning new things.",
+    thumbnail: getYouTubeThumbnail("5MgBikgcWnY"),
+    duration: "19 min",
+    category: "Learning",
     type: "talk",
-    youtubeId: "dQw4w9WgXcQ",
-    transcript: "Talk transcript..."
+    youtubeId: "5MgBikgcWnY",
+    transcript: "Talk transcript...",
+    instructor: "Josh Kaufman",
+    instructorBio: "Josh Kaufman is an author, researcher, and learning expert who specializes in rapid skill acquisition. His work focuses on helping people learn new skills quickly and effectively.",
+    benefits: [
+      "Learn how to acquire new skills quickly",
+      "Understand the principles of deliberate practice",
+      "Discover effective learning strategies",
+      "Overcome the initial learning curve",
+      "Build confidence in learning new things"
+    ]
   },
   {
-    id: "emotional-intelligence",
-    title: "Emotional Intelligence",
-    description: "Discover the power of emotional intelligence in personal and professional success. This talk explores self-awareness, empathy, and relationship management skills.",
-    thumbnail: getYouTubeThumbnail("dQw4w9WgXcQ"),
-    duration: "22 min",
-    category: "Personal Development",
+    id: "visual-history-knowledge",
+    title: "A Visual History of Human Knowledge",
+    description: "Manuel Lima takes us on a fascinating journey through the evolution of human knowledge visualization, from ancient times to the digital age. This talk explores how we've mapped and organized knowledge throughout history.",
+    thumbnail: getYouTubeThumbnail("BQZKs75RMqM"),
+    duration: "18 min",
+    category: "Knowledge",
     type: "talk",
-    youtubeId: "dQw4w9WgXcQ",
-    transcript: "Talk transcript..."
+    youtubeId: "BQZKs75RMqM",
+    transcript: "Talk transcript...",
+    instructor: "Manuel Lima",
+    instructorBio: "Manuel Lima is a designer, author, and researcher who explores the intersection of design, technology, and knowledge visualization. His work focuses on how we organize and understand complex information.",
+    benefits: [
+      "Understand the history of knowledge visualization",
+      "Learn about different ways to organize information",
+      "Gain insights into human cognition",
+      "Discover new ways to structure knowledge",
+      "Appreciate the evolution of information design"
+    ]
+  },
+  {
+    id: "learning-how-to-learn",
+    title: "Learning how to learn",
+    description: "Barbara Oakley shares powerful insights about how our brains learn and remember information. This talk provides practical techniques for more effective learning and overcoming common learning challenges.",
+    thumbnail: getYouTubeThumbnail("O96fE1E-rf8"),
+    duration: "18 min",
+    category: "Learning",
+    type: "talk",
+    youtubeId: "O96fE1E-rf8",
+    transcript: "Talk transcript...",
+    instructor: "Barbara Oakley",
+    instructorBio: "Barbara Oakley is a professor of engineering and the creator of the world's most popular MOOC, 'Learning How to Learn'. Her work focuses on understanding how the brain learns and how to optimize learning processes.",
+    benefits: [
+      "Understand how your brain learns",
+      "Learn effective study techniques",
+      "Overcome procrastination",
+      "Improve memory retention",
+      "Develop better learning habits"
+    ]
   },
 
   // Focus (15 items)
