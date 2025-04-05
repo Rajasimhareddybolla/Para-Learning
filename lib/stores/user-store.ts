@@ -27,6 +27,7 @@ interface UserState {
   joinChallenge: (challengeTitle: string) => void
   leaveChallenge: (challengeTitle: string) => void
   hasJoinedChallenge: (challengeTitle: string) => boolean
+  getUserContextForAI: () => string // New function to get user context
 }
 
 export const useUserStore = create<UserState>()(
@@ -47,6 +48,18 @@ export const useUserStore = create<UserState>()(
         },
       ],
       joinedChallenges: [],
+
+      getUserContextForAI: () => {
+        const state = get();
+        return JSON.stringify({
+          userLevel: state.userLevel,
+          paraCoins: state.paraCoins,
+          completedTasks: state.completedTasks,
+          streakDays: state.streakDays,
+          challengeDay: state.challengeDay,
+          joinedChallenges: state.joinedChallenges
+        });
+      },
 
       addParaCoins: (amount) => {
         set((state) => {

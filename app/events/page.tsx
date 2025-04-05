@@ -551,9 +551,6 @@ function EventCard({ event, isRegistered, onRegister }: EventCardProps) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <a href={`/events/${event.id}`}>Details</a>
-              </Button>
 
               <Button
                 size="sm"

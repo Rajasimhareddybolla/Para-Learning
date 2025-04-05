@@ -81,7 +81,7 @@ interface AiCoachProps {
 }
 
 export function AiCoach({ onClose }: AiCoachProps) {
-  const { aiCoachHistory, addAiMessage } = useUserStore()
+  const { aiCoachHistory, addAiMessage, getUserContextForAI } = useUserStore()
   const [message, setMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -91,12 +91,18 @@ export function AiCoach({ onClose }: AiCoachProps) {
   useEffect(() => {
     const initializeAI = async () => {
       try {
-        // Initialize the Gemini AI with your API key
-        const apiKey = "AIzaSyA9kMN5ja0slIyAAgBLbD1RjouUMFgfOSk"; // Make sure to set this in your environment
+        // Get user context data from the store
+        const userContext = getUserContextForAI();
+        
+        // Augment the system prompt with user data
+        const enhancedPrompt = `${AI_COACH_SYSTEM_PROMPT}\n\nUser Context: ${userContext}`;
+        
+        // Initialize the Gemini AI with your API key and the enhanced prompt
+        const apiKey = "AIzaSyA9kMN5ja0slIyAAgBLbD1RjouUMFgfOSk";
         const ai = new GoogleGenAI(
           apiKey, 
           "gemini-2.0-flash", 
-          AI_COACH_SYSTEM_PROMPT,
+          enhancedPrompt,
           null // No response schema - we want natural text response
         );
         setGenAI(ai);
@@ -106,7 +112,7 @@ export function AiCoach({ onClose }: AiCoachProps) {
     };
     
     initializeAI();
-  }, []);
+  }, [getUserContextForAI]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -127,8 +133,13 @@ export function AiCoach({ onClose }: AiCoachProps) {
 
     try {
       if (genAI) {
-        // Send message to Gemini API
-        const aiResponse = await genAI.generateResponse(message);
+        // Get updated user context
+        const userContext = getUserContextForAI();
+        
+        // Send message to Gemini API with updated user context
+        const aiResponse = await genAI.generateResponse(message, {
+          additionalContext: userContext
+        });
         
         // Add the response directly without parsing as JSON
         addAiMessage("assistant", aiResponse);
