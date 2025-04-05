@@ -1,713 +1,615 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Calendar, Clock, Users, Video, Search, Filter, MapPin, ChevronRight, type ChevronLeft } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
-  MessageCircle,
-  Users,
-  Lock,
-  Calendar,
-  Clock,
-  Send,
-  ThumbsUp,
-  MessageSquare,
-  UserPlus,
-  Video,
-  Award,
-  Unlock,
-} from "lucide-react"
-import { useUserStore } from "@/lib/stores/user-store"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 
-export default function Community() {
-  const { userLevel, paraCoins } = useUserStore()
-  const [newPost, setNewPost] = useState("")
-  const [posts, setPosts] = useState([
+export default function EventsPage() {
+  const [registeredEvents, setRegisteredEvents] = useState<string[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedFormat, setSelectedFormat] = useState<string>("all")
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const [showFilters, setShowFilters] = useState<boolean>(false)
+  const [createEventOpen, setCreateEventOpen] = useState<boolean>(false)
+
+  const events = [
     {
-      name: "Sarah J.",
-      avatar: "/Archive/1.JPG",
-      time: "2h ago",
-      content: "Just completed my 30-day challenge! The accountability in this community made all the difference. My morning meditation practice is now a solid habit.",
-      likes: 12,
-      comments: 4,
-      isExpert: false,
+      id: "event-1",
+      title: "Weekly Reflection Circle",
+      description: "Share insights and challenges from your journey with fellow members",
+      date: "Friday, April 7",
+      time: "3:00 PM - 4:00 PM EST",
+      participants: 18,
+      host: "Sarah Johnson",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "community",
+      format: "virtual",
+      location: "Zoom",
     },
     {
-      name: "Coach David",
-      avatar: "/Archive/2.jpg?height=40&width=40",
-      time: "3h ago",
-      content: "'The only way to do great work is to love what you do.' - Steve Jobs. Remember why you started this journey! What's your primary motivation for transformation?",
-      likes: 32,
-      comments: 5,
-      isExpert: true,
+      id: "event-2",
+      title: "Expert AMA: Overcoming Plateaus",
+      description: "Live Q&A with transformation expert Coach Marcus",
+      date: "Monday, April 10",
+      time: "1:00 PM - 2:00 PM EST",
+      participants: 24,
+      host: "Coach Marcus",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "expert",
+      format: "virtual",
+      location: "Zoom",
     },
     {
-      name: "Michael T.",
-      avatar: "/Archive/3.jpg?height=40&width=40",
-      time: "5h ago",
-      content: "Anyone else struggling with maintaining consistency? Would love some tips from those who've overcome this. I'm great for the first week but then lose momentum.",
-      likes: 8,
-      comments: 7,
-      isExpert: false,
+      id: "event-3",
+      title: "Goal Setting Workshop",
+      description: "Learn effective techniques for setting and achieving your goals",
+      date: "Wednesday, April 12",
+      time: "11:00 AM - 12:30 PM EST",
+      participants: 32,
+      host: "Dr. Jennifer K.",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "workshop",
+      format: "virtual",
+      location: "Google Meet",
     },
     {
-      name: "Dr. Jennifer K.",
-      avatar: "/Archive/4.jpeg?height=40&width=40",
-      time: "6h ago",
-      content: "Research shows that habit stacking is one of the most effective ways to build new behaviors. Try attaching your new habit to an existing one! For example, meditate right after brushing your teeth in the morning.",
-      likes: 45,
-      comments: 12,
-      isExpert: true,
+      id: "event-4",
+      title: "Community Challenge Kickoff",
+      description: "Join the 21-day consistency challenge with fellow members",
+      date: "Monday, April 17",
+      time: "4:00 PM - 5:00 PM EST",
+      participants: 45,
+      host: "Community Team",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "challenge",
+      format: "virtual",
+      location: "Zoom",
+    },
+    {
+      id: "event-5",
+      title: "Mindfulness Masterclass",
+      description: "Deep dive into advanced meditation techniques",
+      date: "Thursday, April 20",
+      time: "2:00 PM - 3:30 PM EST",
+      participants: 28,
+      host: "Dr. Sarah Chen",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "workshop",
+      format: "virtual",
+      location: "Zoom",
+    },
+    {
+      id: "event-6",
+      title: "Productivity Systems Workshop",
+      description: "Build systems that make consistency effortless",
+      date: "Tuesday, April 25",
+      time: "1:00 PM - 2:00 PM EST",
+      participants: 36,
+      host: "James Wilson",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "workshop",
+      format: "virtual",
+      location: "Zoom",
+    },
+    {
+      id: "event-7",
+      title: "Local Meditation Meetup",
+      description: "Join fellow members for an in-person guided meditation session",
+      date: "Saturday, April 15",
+      time: "10:00 AM - 11:30 AM EST",
+      participants: 12,
+      host: "Michael Lee",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "community",
+      format: "in-person",
+      location: "Central Park, New York",
+    },
+    {
+      id: "event-8",
+      title: "Wellness Retreat Weekend",
+      description: "A weekend of mindfulness, movement, and connection",
+      date: "April 29-30",
+      time: "All day",
+      participants: 20,
+      host: "Wellness Team",
+      hostAvatar: "/placeholder.svg?height=40&width=40",
+      category: "retreat",
+      format: "in-person",
+      location: "Mountain View Retreat Center",
+    },
+  ]
+
+  const handleRegister = (eventId: string) => {
+    if (registeredEvents.includes(eventId)) {
+      setRegisteredEvents(registeredEvents.filter((id) => id !== eventId))
+    } else {
+      setRegisteredEvents([...registeredEvents, eventId])
     }
-  ])
-
-  if (userLevel < 2) {
-    return <CommunityLocked level={userLevel} />
   }
 
+  const filteredEvents = events.filter((event) => {
+    // Filter by search query
+    const matchesSearch =
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.host.toLowerCase().includes(searchQuery.toLowerCase())
+
+    // Filter by category
+    const matchesCategory = selectedCategory === "all" || event.category === selectedCategory
+
+    // Filter by format
+    const matchesFormat = selectedFormat === "all" || event.format === selectedFormat
+
+    return matchesSearch && matchesCategory && matchesFormat
+  })
+
+  const upcomingEvents = filteredEvents.filter((event) => {
+    // Simple logic to determine if event is upcoming
+    // In a real app, you'd compare dates properly
+    return true
+  })
+
+  const myEvents = filteredEvents.filter((event) => {
+    return registeredEvents.includes(event.id)
+  })
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container py-8">
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Community</h1>
-            <p className="text-gray-500">Connect with fellow members on their transformation journey</p>
+            <h1 className="text-3xl font-bold">Events</h1>
+            <p className="text-muted-foreground">Join live sessions and connect with the community</p>
           </div>
-          <Badge variant="outline" className="text-lg px-3 py-1">
-            Level {userLevel} • {paraCoins} PARA Coins
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Dialog open={createEventOpen} onOpenChange={setCreateEventOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700">
+                  Create Event
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[525px]">
+                <DialogHeader>
+                  <DialogTitle>Create a New Event</DialogTitle>
+                  <DialogDescription>
+                    Fill out the details below to create a new event for the community.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="event-title">Event Title</Label>
+                    <Input id="event-title" placeholder="e.g., Meditation Workshop" />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="event-description">Description</Label>
+                    <Textarea id="event-description" placeholder="Describe what your event is about..." rows={3} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="event-date">Date</Label>
+                      <Input id="event-date" type="date" />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="event-time">Time</Label>
+                      <Input id="event-time" type="time" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="event-category">Category</Label>
+                      <Select defaultValue="community">
+                        <SelectTrigger id="event-category">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="community">Community</SelectItem>
+                          <SelectItem value="workshop">Workshop</SelectItem>
+                          <SelectItem value="expert">Expert Session</SelectItem>
+                          <SelectItem value="challenge">Challenge</SelectItem>
+                          <SelectItem value="retreat">Retreat</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="event-format">Format</Label>
+                      <Select defaultValue="virtual">
+                        <SelectTrigger id="event-format">
+                          <SelectValue placeholder="Select format" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="virtual">Virtual</SelectItem>
+                          <SelectItem value="in-person">In-Person</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="event-location">Location</Label>
+                    <Input id="event-location" placeholder="e.g., Zoom link or physical address" />
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="event-private" />
+                    <Label htmlFor="event-private">Make this a private event (invite only)</Label>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setCreateEventOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => setCreateEventOpen(false)}
+                    className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700"
+                  >
+                    Create Event
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
-        <Tabs defaultValue="feed">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="feed">
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Feed
-            </TabsTrigger>
-            <TabsTrigger value="events">
-              <Calendar className="h-4 w-4 mr-2" />
-              Events
-            </TabsTrigger>
-            <TabsTrigger value="experts">
-              <UserPlus className="h-4 w-4 mr-2" />
-              Experts
-            </TabsTrigger>
-            <TabsTrigger value="challenges">
-              <Award className="h-4 w-4 mr-2" />
-              Challenges
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-[300px] space-y-4">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search events..."
+                className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
 
-          <TabsContent value="feed" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-2 space-y-6">
-                {userLevel >= 3 && (
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-4">
-                        <Avatar>
-                          <AvatarFallback>You</AvatarFallback>
-                          <AvatarImage src="/placeholder.svg?height=40&width=40" />
-                        </Avatar>
-                        <div className="flex-1">
-                          <Input
-                            placeholder="Share your thoughts or progress..."
-                            className="mb-2"
-                            value={newPost}
-                            onChange={(e) => setNewPost(e.target.value)}
-                          />
-                          <div className="flex justify-end">
-                            <Button
-                              onClick={() => {
-                                if (newPost.trim()) {
-                                  const newPostObj = {
-                                    name: "You",
-                                    avatar: "/placeholder.svg?height=40&width=40",
-                                    time: "Just now",
-                                    content: newPost,
-                                    likes: 0,
-                                    comments: 0,
-                                    isExpert: false,
-                                  }
-                                  setPosts([newPostObj, ...posts])
-                                  setNewPost("")
-                                }
-                              }}
-                              disabled={!newPost.trim()}
-                            >
-                              <Send className="h-4 w-4 mr-2" />
-                              {newPost.trim() ? "Send" : "Post"}
-                            </Button>
-                          </div>
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-between"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <div className="flex items-center">
+                <Filter className="mr-2 h-4 w-4" />
+                Filters
+              </div>
+              {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+
+            {showFilters && (
+              <Card>
+                <CardContent className="p-4 space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="category-filter">Category</Label>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger id="category-filter">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        <SelectItem value="community">Community</SelectItem>
+                        <SelectItem value="workshop">Workshop</SelectItem>
+                        <SelectItem value="expert">Expert Session</SelectItem>
+                        <SelectItem value="challenge">Challenge</SelectItem>
+                        <SelectItem value="retreat">Retreat</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="format-filter">Format</Label>
+                    <Select value={selectedFormat} onValueChange={setSelectedFormat}>
+                      <SelectTrigger id="format-filter">
+                        <SelectValue placeholder="Select format" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Formats</SelectItem>
+                        <SelectItem value="virtual">Virtual</SelectItem>
+                        <SelectItem value="in-person">In-Person</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="date-filter">Date Range</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input id="date-filter-start" type="date" placeholder="From" />
+                      <Input id="date-filter-end" type="date" placeholder="To" />
+                    </div>
+                  </div>
+
+                  <Button
+                    className="w-full bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700"
+                    onClick={() => {
+                      // Reset filters
+                      setSelectedCategory("all")
+                      setSelectedFormat("all")
+                    }}
+                  >
+                    Reset Filters
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle>My Calendar</CardTitle>
+                <CardDescription>Your upcoming registered events</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {myEvents.length === 0 ? (
+                  <div className="text-center py-4 text-muted-foreground">
+                    <p>You haven't registered for any events yet.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {myEvents.slice(0, 3).map((event) => (
+                      <div key={event.id} className="flex items-start gap-3 border-b pb-3 last:border-0 last:pb-0">
+                        <div className="h-10 w-10 rounded-md bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                          {event.date.split(" ")[1]}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{event.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {event.date}, {event.time}
+                          </p>
                         </div>
                       </div>
+                    ))}
+
+                    {myEvents.length > 3 && (
+                      <Button variant="outline" className="w-full text-sm" asChild>
+                        <a href="/events/my-events">
+                          View All My Events
+                          <ChevronRight className="ml-1 h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="flex-1">
+            <Tabs defaultValue="upcoming" className="w-full">
+              <TabsList className="w-full justify-start mb-4 bg-transparent p-0 h-auto">
+                <TabsTrigger
+                  value="upcoming"
+                  className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg mr-2"
+                >
+                  Upcoming Events
+                </TabsTrigger>
+                <TabsTrigger
+                  value="my-events"
+                  className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg mr-2"
+                >
+                  My Events ({myEvents.length})
+                </TabsTrigger>
+                <TabsTrigger
+                  value="past"
+                  className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg"
+                >
+                  Past Events
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="upcoming" className="mt-0 space-y-4">
+                {upcomingEvents.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <p className="text-muted-foreground">No upcoming events match your filters.</p>
                     </CardContent>
                   </Card>
+                ) : (
+                  upcomingEvents.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isRegistered={registeredEvents.includes(event.id)}
+                      onRegister={() => handleRegister(event.id)}
+                    />
+                  ))
                 )}
+              </TabsContent>
 
-                {posts.map((post, index) => (
-                  <CommunityPost
-                    key={index}
-                    name={post.name}
-                    avatar={post.avatar}
-                    time={post.time}
-                    content={post.content}
-                    likes={post.likes}
-                    comments={post.comments}
-                    isExpert={post.isExpert}
-                  />
-                ))}
-              </div>
+              <TabsContent value="my-events" className="mt-0 space-y-4">
+                {myEvents.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <p className="text-muted-foreground">You haven't registered for any events yet.</p>
+                      <Button
+                        className="mt-4 bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700"
+                        onClick={() => document.querySelector('[data-state="inactive"][value="upcoming"]')?.click()}
+                      >
+                        Browse Upcoming Events
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  myEvents.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isRegistered={true}
+                      onRegister={() => handleRegister(event.id)}
+                    />
+                  ))
+                )}
+              </TabsContent>
 
-              <div className="space-y-6">
+              <TabsContent value="past" className="mt-0 space-y-4">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Upcoming Events</CardTitle>
-                    <CardDescription>Join live sessions with the community</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="border rounded-lg p-3">
-                      <h3 className="font-medium">Weekly Reflection Circle</h3>
-                      <p className="text-sm text-gray-500 mb-2">Share insights and challenges</p>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Calendar className="h-3 w-3" />
-                        <span>Friday, 3:00 PM</span>
-                      </div>
-                    </div>
-                    <div className="border rounded-lg p-3">
-                      <h3 className="font-medium">Expert AMA: Overcoming Plateaus</h3>
-                      <p className="text-sm text-gray-500 mb-2">Live Q&A with Coach Marcus</p>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Calendar className="h-3 w-3" />
-                        <span>Monday, 1:00 PM</span>
-                      </div>
-                    </div>
-                    <Button variant="outline" className="w-full" asChild>
-                      <a href="/events">View All Events</a>
-                    </Button>
+                  <CardContent className="p-6 text-center">
+                    <p className="text-muted-foreground">Past events will appear here.</p>
                   </CardContent>
                 </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Active Members</CardTitle>
-                    <CardDescription>Connect with fellow challengers</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarFallback>SJ</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">Sarah J.</p>
-                        <p className="text-xs text-gray-500">Level 3 • 21-day streak</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarFallback>MT</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">Michael T.</p>
-                        <p className="text-xs text-gray-500">Level 2 • 7-day streak</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarFallback>ER</AvatarFallback>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" />
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">Elena R.</p>
-                        <p className="text-xs text-gray-500">Level 3 • 35-day streak</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" className="w-full">
-                      View All Members
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="events" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <EventCard
-                title="Weekly Reflection Circle"
-                description="Share your insights and challenges from the past week"
-                date="Friday, April 7"
-                time="3:00 PM - 4:00 PM EST"
-                host="Sarah Johnson"
-                hostAvatar="/Archive/5.jpeg?height=40&width=40"
-                participants={18}
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-
-              <EventCard
-                title="Expert AMA: Overcoming Plateaus"
-                description="Live Q&A with transformation expert Coach Marcus"
-                date="Monday, April 10"
-                time="1:00 PM - 2:00 PM EST"
-                host="Coach Marcus"
-                hostAvatar="/Archive/3.jpg?height=40&width=40"
-                participants={24}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <EventCard
-                title="Goal Setting Workshop"
-                description="Learn effective techniques for setting and achieving your goals"
-                date="Wednesday, April 12"
-                time="11:00 AM - 12:30 PM EST"
-                host="Dr. Jennifer K."
-                hostAvatar="/placeholder.svg?height=40&width=40"
-                participants={32}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <EventCard
-                title="Community Challenge Kickoff"
-                description="Join the 21-day consistency challenge with fellow members"
-                date="Monday, April 17"
-                time="4:00 PM - 5:00 PM EST"
-                host="Community Team"
-                hostAvatar="/placeholder.svg?height=40&width=40"
-                participants={45}
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-
-              <EventCard
-                title="Mindfulness Masterclass"
-                description="Deep dive into advanced meditation techniques"
-                date="Thursday, April 20"
-                time="2:00 PM - 3:30 PM EST"
-                host="Dr. Sarah Chen"
-                hostAvatar="/placeholder.svg?height=40&width=40"
-                participants={28}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <EventCard
-                title="Productivity Systems Workshop"
-                description="Build systems that make consistency effortless"
-                date="Tuesday, April 25"
-                time="1:00 PM - 2:00 PM EST"
-                host="James Wilson"
-                hostAvatar="/placeholder.svg?height=40&width=40"
-                participants={36}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="experts" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ExpertCard
-                name="Dr. Jennifer K."
-                title="Mindset & Psychology Expert"
-                avatar="/placeholder.svg?height=200&width=200"
-                bio="Specializes in helping people overcome limiting beliefs and develop resilient mindsets. PhD in Psychology with 15 years of experience in personal transformation."
-                expertise={["Mindset Transformation", "Habit Formation", "Emotional Intelligence"]}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <ExpertCard
-                name="Coach Marcus"
-                title="Performance & Productivity Coach"
-                avatar="/placeholder.svg?height=200&width=200"
-                bio="Former Olympic athlete turned productivity expert. Helps high-achievers optimize their systems and routines for peak performance and sustainable growth."
-                expertise={["Peak Performance", "Goal Achievement", "Time Management"]}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <ExpertCard
-                name="Sarah Chen, PhD"
-                title="Meditation & Mindfulness Guide"
-                avatar="/placeholder.svg?height=200&width=200"
-                bio="Meditation practitioner with over 20 years of experience. Combines Eastern wisdom with modern neuroscience to help people develop deeper awareness."
-                expertise={["Meditation", "Stress Reduction", "Present Moment Awareness"]}
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <ExpertCard
-                name="David Rodriguez"
-                title="Physical Transformation Specialist"
-                avatar="/placeholder.svg?height=200&width=200"
-                bio="Certified fitness trainer and nutritionist who focuses on sustainable lifestyle changes rather than quick fixes. Specializes in habit-based fitness."
-                expertise={["Fitness Habits", "Nutrition", "Energy Management"]}
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-
-              <ExpertCard
-                name="Dr. Michael Lee"
-                title="Sleep & Recovery Expert"
-                avatar="/placeholder.svg?height=200&width=200"
-                bio="Neuroscientist specializing in sleep optimization and recovery protocols. Helps high-performers enhance their rest for better overall performance."
-                expertise={["Sleep Optimization", "Recovery Protocols", "Circadian Rhythms"]}
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-
-              <ExpertCard
-                name="Elena Patel"
-                title="Purpose & Vision Coach"
-                avatar="/placeholder.svg?height=200&width=200"
-                bio="Guides individuals in discovering their core values and aligning their goals with deeper purpose. Former executive who found meaning through personal transformation."
-                expertise={["Purpose Discovery", "Vision Setting", "Values Alignment"]}
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="challenges" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <CommunityChallenge
-                title="21-Day Meditation Challenge"
-                description="Build a consistent meditation practice with daily guided sessions"
-                participants={124}
-                startDate="April 10"
-                duration="21 days"
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <CommunityChallenge
-                title="Morning Routine Mastery"
-                description="Transform your mornings to set yourself up for daily success"
-                participants={87}
-                startDate="April 15"
-                duration="30 days"
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <CommunityChallenge
-                title="Digital Detox Weekend"
-                description="Reset your relationship with technology and reclaim your focus"
-                participants={56}
-                startDate="April 22"
-                duration="Weekend"
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <CommunityChallenge
-                title="Gratitude Journal Challenge"
-                description="Develop a daily gratitude practice to boost wellbeing"
-                participants={103}
-                startDate="Ongoing"
-                duration="14 days"
-                requiredLevel={2}
-                userLevel={userLevel}
-              />
-
-              <CommunityChallenge
-                title="Fitness Consistency Challenge"
-                description="Commit to daily movement, no matter how small"
-                participants={142}
-                startDate="April 1"
-                duration="30 days"
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-
-              <CommunityChallenge
-                title="Mindful Eating Practice"
-                description="Transform your relationship with food through awareness"
-                participants={68}
-                startDate="April 18"
-                duration="28 days"
-                requiredLevel={3}
-                userLevel={userLevel}
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       </div>
     </div>
-  )
-}
-
-function CommunityLocked({ level }: { level: number }) {
-  return (
-    <div className="container mx-auto p-4 flex items-center justify-center min-h-[70vh]">
-      <Card className="max-w-md w-full">
-        <CardContent className="pt-6 text-center">
-          <Lock className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-          <h2 className="text-2xl font-bold mb-2">Community Access Locked</h2>
-          <p className="text-gray-500 mb-6">
-            {level === 1
-              ? "You need to reach Level 2 to access the community features. Complete tasks to earn PARA Coins and level up!"
-              : "You're close! Continue earning PARA Coins to unlock full community access at Level 3."}
-          </p>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Badge variant={level >= 1 ? "default" : "outline"}>Level 1</Badge>
-              <span className="text-sm">Solo Journey - AI Coach Access</span>
-              <Unlock className="h-3 w-3 ml-auto text-green-500" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant={level >= 2 ? "default" : "outline"}>Level 2</Badge>
-              <span className="text-sm">Mentor Access - Expert Guidance</span>
-              {level < 2 && <Lock className="h-3 w-3 ml-auto" />}
-              {level >= 2 && <Unlock className="h-3 w-3 ml-auto text-green-500" />}
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant={level >= 3 ? "default" : "outline"}>Level 3</Badge>
-              <span className="text-sm">Community Access - Full Features</span>
-              <Lock className="h-3 w-3 ml-auto" />
-            </div>
-          </div>
-          <Button className="w-full mt-6" asChild>
-            <a href="/dashboard">Return to Dashboard</a>
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-interface CommunityPostProps {
-  name: string
-  avatar: string
-  time: string
-  content: string
-  likes: number
-  comments: number
-  isExpert: boolean
-}
-
-function CommunityPost({ name, avatar, time, content, likes, comments, isExpert }: CommunityPostProps) {
-  const [liked, setLiked] = useState(false)
-
-  return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3 mb-3">
-          <Avatar>
-            <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-            <AvatarImage src={avatar} />
-          </Avatar>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-medium">{name}</span>
-              {isExpert && (
-                <Badge variant="outline" className="h-5 flex items-center text-xs">
-                  <UserPlus className="h-3 w-3 mr-1" />
-                  Expert
-                </Badge>
-              )}
-            </div>
-            <p className="text-xs text-gray-500">{time}</p>
-          </div>
-        </div>
-        <p className="mb-4">{content}</p>
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`flex items-center gap-1 ${liked ? "text-blue-500" : ""}`}
-            onClick={() => setLiked(!liked)}
-          >
-            <ThumbsUp className="h-4 w-4" />
-            {liked ? likes + 1 : likes}
-          </Button>
-          <Button variant="ghost" size="sm" className="flex items-center gap-1">
-            <MessageSquare className="h-4 w-4" />
-            {comments}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
   )
 }
 
 interface EventCardProps {
-  title: string
-  description: string
-  date: string
-  time: string
-  host: string
-  hostAvatar: string
-  participants: number
-  requiredLevel: number
-  userLevel: number
+  event: {
+    id: string
+    title: string
+    description: string
+    date: string
+    time: string
+    participants: number
+    host: string
+    hostAvatar: string
+    category: string
+    format: string
+    location: string
+  }
+  isRegistered: boolean
+  onRegister: () => void
 }
 
-function EventCard({
-  title,
-  description,
-  date,
-  time,
-  host,
-  hostAvatar,
-  participants,
-  requiredLevel,
-  userLevel,
-}: EventCardProps) {
+function EventCard({ event, isRegistered, onRegister }: EventCardProps) {
+  const getCategoryBadge = (category: string) => {
+    switch (category) {
+      case "community":
+        return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">Community</Badge>
+      case "workshop":
+        return <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200">Workshop</Badge>
+      case "expert":
+        return <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200">Expert Session</Badge>
+      case "challenge":
+        return <Badge className="bg-green-100 text-green-700 hover:bg-green-200">Challenge</Badge>
+      case "retreat":
+        return <Badge className="bg-red-100 text-red-700 hover:bg-red-200">Retreat</Badge>
+      default:
+        return <Badge>{category}</Badge>
+    }
+  }
+
   return (
-    <Card>
+    <Card className="hover:border-blue-200 transition-colors">
       <CardContent className="p-4">
-        <div>
-          <h3 className="font-semibold text-lg">{title}</h3>
-          <p className="text-sm text-gray-500 mb-3">{description}</p>
-          <div className="flex flex-wrap gap-2 mb-3">
-            <Badge variant="outline" className="flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
-              {date}
-            </Badge>
-            <Badge variant="outline" className="flex items-center gap-1">
-              <Clock className="h-3 w-3" />
-              {time}
-            </Badge>
-            <Badge variant="outline" className="flex items-center gap-1">
-              <Users className="h-3 w-3" />
-              {participants} participants
-            </Badge>
-          </div>
-          <div className="flex items-center gap-2 mb-4">
-            <Avatar className="h-6 w-6">
-              <AvatarFallback>{host.charAt(0)}</AvatarFallback>
-              <AvatarImage src={hostAvatar} />
-            </Avatar>
-            <span className="text-sm">Hosted by {host}</span>
-          </div>
-          <div>
-            {userLevel >= requiredLevel ? (
-              <Button className="w-full flex items-center gap-1">
-                <Video className="h-4 w-4" />
-                Join Event
-              </Button>
-            ) : (
-              <Button disabled variant="outline" className="w-full flex items-center gap-1">
-                <Lock className="h-4 w-4 mr-1" />
-                Level {requiredLevel} Required
-              </Button>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-interface ExpertCardProps {
-  name: string
-  title: string
-  avatar: string
-  bio: string
-  expertise: string[]
-  requiredLevel: number
-  userLevel: number
-}
-
-function ExpertCard({ name, title, avatar, bio, expertise, requiredLevel, userLevel }: ExpertCardProps) {
-  return (
-    <Card>
-      <div className="relative">
-        <img src={avatar || "/placeholder.svg"} alt={name} className="w-full h-48 object-cover" />
-        {userLevel < requiredLevel && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <div className="text-center text-white">
-              <Lock className="h-8 w-8 mx-auto mb-2" />
-              <p className="text-sm">Reach Level {requiredLevel} to Access</p>
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-medium">{event.title}</h3>
+                {getCategoryBadge(event.category)}
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">{event.description}</p>
             </div>
           </div>
-        )}
-      </div>
-      <CardContent className="p-4">
-        <h3 className="font-bold text-lg">{name}</h3>
-        <p className="text-sm text-gray-500 mb-3">{title}</p>
-        <p className="text-sm mb-3">{bio}</p>
-        <div className="mb-4">
-          <p className="text-sm font-medium mb-2">Areas of Expertise:</p>
-          <div className="flex flex-wrap gap-2">
-            {expertise.map((item, index) => (
-              <Badge key={index} variant="outline">
-                {item}
-              </Badge>
-            ))}
+
+          <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center">
+              <Calendar className="h-4 w-4 mr-1" />
+              <span>{event.date}</span>
+            </div>
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-1" />
+              <span>{event.time}</span>
+            </div>
+            <div className="flex items-center">
+              <MapPin className="h-4 w-4 mr-1" />
+              <span>{event.location}</span>
+            </div>
+            <div className="flex items-center">
+              <Users className="h-4 w-4 mr-1" />
+              <span>{event.participants} participants</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Avatar className="h-6 w-6">
+                <AvatarFallback>{event.host.charAt(0)}</AvatarFallback>
+                <AvatarImage src={event.hostAvatar} />
+              </Avatar>
+              <span className="text-sm">Hosted by {event.host}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" asChild>
+                <a href={`/events/${event.id}`}>Details</a>
+              </Button>
+
+              <Button
+                size="sm"
+                onClick={onRegister}
+                className={cn(
+                  isRegistered
+                    ? "bg-green-500 hover:bg-green-600"
+                    : "bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700",
+                )}
+              >
+                <Video className="h-4 w-4 mr-2" />
+                {isRegistered ? "Registered" : "Register"}
+              </Button>
+            </div>
           </div>
         </div>
-        {userLevel >= requiredLevel ? (
-          <Button className="w-full">Schedule Session</Button>
-        ) : (
-          <Button disabled variant="outline" className="w-full">
-            <Lock className="h-4 w-4 mr-1" />
-            Level {requiredLevel} Required
-          </Button>
-        )}
       </CardContent>
     </Card>
   )
 }
 
-interface CommunityChallenge {
-  title: string
-  description: string
-  participants: number
-  startDate: string
-  duration: string
-  requiredLevel: number
-  userLevel: number
+function ChevronUp(props: React.ComponentProps<typeof ChevronLeft>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  )
 }
 
-function CommunityChallenge({
-  title,
-  description,
-  participants,
-  startDate,
-  duration,
-  requiredLevel,
-  userLevel,
-}: CommunityChallenge) {
+function ChevronDown(props: React.ComponentProps<typeof ChevronLeft>) {
   return (
-    <Card>
-      <CardContent className="p-4">
-        <h3 className="font-bold text-lg">{title}</h3>
-        <p className="text-sm text-gray-500 mb-3">{description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Users className="h-3 w-3" />
-            {participants} participants
-          </Badge>
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Calendar className="h-3 w-3" />
-            Starts: {startDate}
-          </Badge>
-          <Badge variant="outline" className="flex items-center gap-1">
-            <Clock className="h-3 w-3" />
-            Duration: {duration}
-          </Badge>
-        </div>
-        {userLevel >= requiredLevel ? (
-          <Button className="w-full">Join Challenge</Button>
-        ) : (
-          <Button disabled variant="outline" className="w-full">
-            <Lock className="h-4 w-4 mr-1" />
-            Level {requiredLevel} Required
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   )
 }
 
