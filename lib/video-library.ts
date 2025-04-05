@@ -215,14 +215,57 @@ export const videoLibrary: Video[] = [
 
   // Focus (15 items)
   {
-    id: "alpha-waves",
-    title: "Alpha Waves for Focus",
-    description: "Enhance your concentration and mental clarity with this alpha wave sound session. Perfect for deep work, studying, or creative tasks.",
-    thumbnail: getYouTubeThumbnail("dQw4w9WgXcQ"),
-    duration: "60 min",
-    category: "Binaural Beats",
+    id: "deep-focus-music",
+    title: "Deep Focus - Music For Studying, Concentration and Work",
+    description: "A carefully curated selection of ambient music designed to enhance focus and concentration. Perfect for studying, working, or any task requiring deep attention.",
+    thumbnail: getYouTubeThumbnail("oPVte6aMprI"),
+    duration: "120 min",
+    category: "Focus Music",
     type: "focus",
-    youtubeId: "dQw4w9WgXcQ",
-    transcript: "Focus sound transcript..."
+    youtubeId: "oPVte6aMprI",
+    transcript: "Focus music...",
+    benefits: [
+      "Enhances concentration",
+      "Reduces distractions",
+      "Creates a productive atmosphere",
+      "Helps maintain focus for extended periods",
+      "Suitable for various work environments"
+    ]
+  },
+  {
+    id: "productivity-playlist",
+    title: "Productivity Playlist: 4 Hours of Concentration Music for Work",
+    description: "A comprehensive playlist of concentration-enhancing music designed to boost productivity and maintain focus during work sessions. Perfect for deep work and creative tasks.",
+    thumbnail: getYouTubeThumbnail("M8FaZxxLK_o"),
+    duration: "240 min",
+    category: "Focus Music",
+    type: "focus",
+    youtubeId: "M8FaZxxLK_o",
+    transcript: "Focus music...",
+    benefits: [
+      "Extended duration for long work sessions",
+      "Varied musical styles to maintain engagement",
+      "Helps establish a productive rhythm",
+      "Reduces mental fatigue",
+      "Creates an optimal work environment"
+    ]
+  },
+  {
+    id: "focus-mind-white-noise",
+    title: "Focus Mind White Noise | Study Sound for Concentration",
+    description: "A continuous white noise track designed to block out distractions and create an optimal environment for studying, homework, and exam preparation.",
+    thumbnail: getYouTubeThumbnail("4Yybz_FmXdU"),
+    duration: "600 min",
+    category: "White Noise",
+    type: "focus",
+    youtubeId: "4Yybz_FmXdU",
+    transcript: "White noise...",
+    benefits: [
+      "Blocks external distractions",
+      "Creates a consistent sound environment",
+      "Helps maintain focus for extended periods",
+      "Ideal for study and exam preparation",
+      "Can be used for sleep or relaxation"
+    ]
   }
 ]; 
