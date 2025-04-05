@@ -318,7 +318,7 @@ export default function Community() {
               <ExpertCard
                 name="Dr. Jennifer K."
                 title="Mindset & Psychology Expert"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/1.jpg?height=200&width=200"
                 bio="Specializes in helping people overcome limiting beliefs and develop resilient mindsets. PhD in Psychology with 15 years of experience in personal transformation."
                 expertise={["Mindset Transformation", "Habit Formation", "Emotional Intelligence"]}
                 requiredLevel={2}
@@ -328,7 +328,7 @@ export default function Community() {
               <ExpertCard
                 name="Coach Marcus"
                 title="Performance & Productivity Coach"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/2.webp?height=200&width=200"
                 bio="Former Olympic athlete turned productivity expert. Helps high-achievers optimize their systems and routines for peak performance and sustainable growth."
                 expertise={["Peak Performance", "Goal Achievement", "Time Management"]}
                 requiredLevel={2}
@@ -338,7 +338,7 @@ export default function Community() {
               <ExpertCard
                 name="Sarah Chen, PhD"
                 title="Meditation & Mindfulness Guide"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/3.jpeg?height=200&width=200"
                 bio="Meditation practitioner with over 20 years of experience. Combines Eastern wisdom with modern neuroscience to help people develop deeper awareness."
                 expertise={["Meditation", "Stress Reduction", "Present Moment Awareness"]}
                 requiredLevel={2}
@@ -348,7 +348,7 @@ export default function Community() {
               <ExpertCard
                 name="David Rodriguez"
                 title="Physical Transformation Specialist"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/4.jpeg?height=200&width=200"
                 bio="Certified fitness trainer and nutritionist who focuses on sustainable lifestyle changes rather than quick fixes. Specializes in habit-based fitness."
                 expertise={["Fitness Habits", "Nutrition", "Energy Management"]}
                 requiredLevel={3}
@@ -358,7 +358,7 @@ export default function Community() {
               <ExpertCard
                 name="Dr. Michael Lee"
                 title="Sleep & Recovery Expert"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/community/5.jpeg?height=200&width=200"
                 bio="Neuroscientist specializing in sleep optimization and recovery protocols. Helps high-performers enhance their rest for better overall performance."
                 expertise={["Sleep Optimization", "Recovery Protocols", "Circadian Rhythms"]}
                 requiredLevel={3}
@@ -368,7 +368,7 @@ export default function Community() {
               <ExpertCard
                 name="Elena Patel"
                 title="Purpose & Vision Coach"
-                avatar="/placeholder.svg?height=200&width=200"
+                avatar="/Community/6.jpeg?height=200&width=200"
                 bio="Guides individuals in discovering their core values and aligning their goals with deeper purpose. Former executive who found meaning through personal transformation."
                 expertise={["Purpose Discovery", "Vision Setting", "Values Alignment"]}
                 requiredLevel={3}
