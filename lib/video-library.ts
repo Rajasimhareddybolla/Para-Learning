@@ -70,15 +70,85 @@ export const videoLibrary: Video[] = [
 
   // Workouts (18 items)
   {
-    id: "power-hiit",
-    title: "Power HIIT Workout",
-    description: "A high-intensity interval training session designed to boost your metabolism and improve cardiovascular fitness. Perfect for those looking to maximize their workout in minimal time.",
-    thumbnail: getYouTubeThumbnail("dQw4w9WgXcQ"),
+    id: "full-body-hiit-beginners",
+    title: "25 MIN FULL BODY HIIT for Beginners",
+    description: "A beginner-friendly full body HIIT workout that requires no equipment. This no-repeat workout is perfect for those starting their fitness journey, focusing on building strength and endurance.",
+    thumbnail: getYouTubeThumbnail("cbKkB3POqaY"),
     duration: "25 min",
     category: "HIIT",
     type: "workout",
-    youtubeId: "dQw4w9WgXcQ",
-    transcript: "Workout transcript..."
+    youtubeId: "cbKkB3POqaY",
+    transcript: "Workout transcript...",
+    instructor: "Growingannanas",
+    instructorBio: "Growingannanas creates effective and fun workout routines that are accessible to everyone. Her workouts focus on proper form and gradual progression.",
+    benefits: [
+      "Full body workout",
+      "No equipment needed",
+      "Perfect for beginners",
+      "Builds strength and endurance",
+      "Improves cardiovascular health"
+    ],
+    preparation: [
+      "Find a clear space to move",
+      "Wear comfortable workout clothes",
+      "Have a water bottle nearby",
+      "Use a yoga mat if available",
+      "Warm up properly before starting"
+    ]
+  },
+  {
+    id: "killer-hiit-workout",
+    title: "30 MIN KILLER HIIT Workout",
+    description: "An intense HIIT workout that will challenge your endurance and strength. This no-equipment workout is designed to push your limits and help you achieve your fitness goals.",
+    thumbnail: getYouTubeThumbnail("xzqexC11dEM"),
+    duration: "30 min",
+    category: "HIIT",
+    type: "workout",
+    youtubeId: "xzqexC11dEM",
+    transcript: "Workout transcript...",
+    instructor: "Growingannanas",
+    instructorBio: "Growingannanas creates effective and fun workout routines that are accessible to everyone. Her workouts focus on proper form and gradual progression.",
+    benefits: [
+      "High-intensity cardio",
+      "No equipment needed",
+      "Burns maximum calories",
+      "Improves endurance",
+      "Builds strength"
+    ],
+    preparation: [
+      "Find a clear space to move",
+      "Wear comfortable workout clothes",
+      "Have a water bottle nearby",
+      "Use a yoga mat if available",
+      "Warm up properly before starting"
+    ]
+  },
+  {
+    id: "bodyweight-hiit-joe-wicks",
+    title: "20 Minute Bodyweight HIIT Workout",
+    description: "A high-energy HIIT workout led by Joe Wicks that requires no equipment. This bodyweight workout is perfect for burning calories and building strength in just 20 minutes.",
+    thumbnail: getYouTubeThumbnail("-4aTf4TlQnI"),
+    duration: "20 min",
+    category: "HIIT",
+    type: "workout",
+    youtubeId: "-4aTf4TlQnI",
+    transcript: "Workout transcript...",
+    instructor: "Joe Wicks",
+    instructorBio: "Joe Wicks, also known as The Body Coach, is a fitness coach and author who specializes in high-intensity workouts and healthy eating. His energetic and motivational style has helped millions get fit.",
+    benefits: [
+      "Full body workout",
+      "No equipment needed",
+      "Burns calories efficiently",
+      "Improves cardiovascular fitness",
+      "Builds strength and endurance"
+    ],
+    preparation: [
+      "Find a clear space to move",
+      "Wear comfortable workout clothes",
+      "Have a water bottle nearby",
+      "Use a yoga mat if available",
+      "Warm up properly before starting"
+    ]
   },
 
   // Talks (32 items)
