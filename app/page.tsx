@@ -1,6 +1,6 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -14,19 +14,14 @@ export default function Home() {
                   Transform Your Life in 41 Days
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl">
-                  Set your own goals, track your progress, and unlock your full potential with personalized challenges
-                  and community support.
+                  Set your own goals, track your progress, and unlock your full
+                  potential with personalized challenges and community support.
                 </p>
               </div>
               <div className="space-x-4">
                 <Link href="/profile">
                   <Button size="lg" className="gap-2">
                     Get Started <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/about">
-                  <Button variant="outline" size="lg">
-                    Learn More
                   </Button>
                 </Link>
               </div>
@@ -36,39 +31,7 @@ export default function Home() {
 
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
-              <div className="flex flex-col items-center space-y-4 text-center">
-                <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-8 w-8 text-primary"
-                  >
-                    <path d="M12 2v4" />
-                    <path d="M12 18v4" />
-                    <path d="M4.93 4.93l2.83 2.83" />
-                    <path d="M16.24 16.24l2.83 2.83" />
-                    <path d="M2 12h4" />
-                    <path d="M18 12h4" />
-                    <path d="M4.93 19.07l2.83-2.83" />
-                    <path d="M16.24 7.76l2.83-2.83" />
-                  </svg>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold">Personalized Growth Paths</h3>
-                  <p className="text-gray-500">
-                    Tailored programs based on your age, profession, and life goals to help you achieve meaningful
-                    transformation.
-                  </p>
-                </div>
-              </div>
+            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col items-center space-y-4 text-center">
                 <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                   <svg
@@ -90,8 +53,8 @@ export default function Home() {
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold">41-Day Challenge</h3>
                   <p className="text-gray-500">
-                    Our flagship program helps you build lasting habits through consistent daily actions and adaptive
-                    difficulty.
+                    Our flagship program helps you build lasting habits through
+                    consistent daily actions and adaptive difficulty.
                   </p>
                 </div>
               </div>
@@ -114,10 +77,12 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold">Functional Audio Library</h3>
+                  <h3 className="text-xl font-bold">
+                    Functional Audio Library
+                  </h3>
                   <p className="text-gray-500">
-                    Access guided meditations, workout sessions, knowledge talks, and focus sounds to enhance your
-                    journey.
+                    Access guided meditations, workout sessions, knowledge
+                    talks, and focus sounds to enhance your journey.
                   </p>
                 </div>
               </div>
@@ -126,6 +91,5 @@ export default function Home() {
         </section>
       </main>
     </div>
-  )
+  );
 }
-

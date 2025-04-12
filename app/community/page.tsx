@@ -749,7 +749,9 @@ function ExpertCard({
         {userLevel >= requiredLevel ? (
           <>
             <Button
-              className={`w-full ${isScheduled ? "bg-green-500 text-white" : ""}`}
+              className={`w-full ${
+                isScheduled ? "bg-green-500 text-white" : ""
+              }`}
               onClick={() => setIsModalOpen(true)}
               disabled={isScheduled}
             >
